@@ -254,5 +254,48 @@ document.addEventListener('input',e=>{const i=e.target.dataset.q,m=e.target.data
 draw();
 })();
 </script>
+<!-- Modal Proteksi Password -->
+<div id="auth-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;">
+  <div style="background:var(--pn);padding:24px;border-radius:8px;border:1px solid var(--ln);box-shadow:0 4px 12px rgba(0,0,0,0.1);text-align:center;max-width:320px;width:90%;">
+    <h3 style="margin-top:0;">Akses Terbatas</h3>
+    <p style="font-size:12px;color:var(--mu);margin-bottom:16px;">Masukkan kata sandi untuk mengakses dashboard ini.</p>
+    <input type="password" id="pass-input" placeholder="Kata Sandi" style="margin-bottom:12px;text-align:center;">
+    <button id="pass-btn" style="width:100%;padding:8px;background:var(--a);color:#fff;border:none;border-radius:6px;font-weight:600;cursor:pointer;">Masuk</button>
+    <p id="pass-err" style="color:#d32f2f;font-size:12px;margin:8px 0 0;display:none;">Kata sandi salah!</p>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Ganti password ini sesuai kebutuhan Anda
+  const SECRET_PASS = "Reportgmv1234!"; 
+
+  const appEl = document.querySelector('.app');
+  if (appEl) appEl.style.display = 'none';
+
+  function checkAuth() {
+    const input = document.getElementById('pass-input').value;
+    const errEl = document.getElementById('pass-err');
+    
+    if (input === SECRET_PASS) {
+      document.getElementById('auth-overlay').style.display = 'none';
+      if (appEl) appEl.style.display = 'grid';
+      sessionStorage.setItem('authenticated', 'true');
+    } else {
+      errEl.style.display = 'block';
+    }
+  }
+
+  if (sessionStorage.getItem('authenticated') === 'true') {
+    document.getElementById('auth-overlay').style.display = 'none';
+    if (appEl) appEl.style.display = 'grid';
+  }
+
+  document.getElementById('pass-btn').addEventListener('click', checkAuth);
+  document.getElementById('pass-input').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') checkAuth();
+  });
+})();
+</script>
 </body>
 </html>
